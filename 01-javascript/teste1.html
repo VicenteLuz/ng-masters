@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 </head>
 <body>
-    Usuario <input type="text" id="user">
-    Repositório <input type="text" id="reponame">
+    Usuario <input type="text" id="user" value="freedomsponsors">
+    Repositório <input type="text" id="reponame" value="www.freedomsponsors.org">
     <button onclick="vaibuscarasissues()">Vai buscar as issues</button>
 
     <table id="issuestable">
@@ -19,17 +20,32 @@
 <script>
     function vaibuscarasissues(){
         function GithubRepo(username, reponame){
-            var url = 'https://' + username + '.github.io/' + reponame + '/'
-            result = $.get(url)
-		    console.table(result);
+
+            function addIssue(issue, tableid){
+                var trhtml = '<tr><td>'+issue.number+'</td><td>'+issue.title+'</td>'
+                $(tableid).append(trhtml)
+            }
+
+            var repo = {
+                busca_issues_e_depois_popula_tabela: function(tableid){
+                    var url = 'https://api.github.com/repos/' + username + '/' + reponame + '/issues'
+                    result = $.get(url).success(function (result){
+                        for(var i=0; i<result.length; i++){
+                            addIssue(result[i], tableid)
+                        }
+                    })
+                },
+                busca_codigo_do_arquivo: function(path){}
+            };
+            return repo;
         }
     
         //mais um pouco de codigo aqui....
-        username = $('#user').val();
-        reponame = $('#reponame').val();
+        var username = $('#user').val();
+        var reponame = $('#reponame').val();
         var le_repo = GithubRepo(username, reponame);
-        //le_repo.busca_issues();
-        //le_repo.popula_tabela("#issuestable");
+        le_repo.busca_issues_e_depois_popula_tabela('#issuestable')
+
     }
 </script>
 </html>
