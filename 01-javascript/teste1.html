@@ -10,7 +10,7 @@
 </head>
 <body>
     Usuario <input type="text" id="user" value="freedomsponsors">
-    Repositório <input type="text" id="reponame" value="www.freedomsponsors.org">
+    Repositório <input type="text" id="reponame" value="freedomsponsors">
     <button onclick="vaibuscarasissues()">Vai buscar as issues</button>
 
     <table id="issuestable">
@@ -20,32 +20,21 @@
 <script>
     function vaibuscarasissues(){
         function GithubRepo(username, reponame){
-
-            function addIssue(issue, tableid){
-                var trhtml = '<tr><td>'+issue.number+'</td><td>'+issue.title+'</td>'
-                $(tableid).append(trhtml)
-            }
-
-            var repo = {
-                busca_issues_e_depois_popula_tabela: function(tableid){
-                    var url = 'https://api.github.com/repos/' + username + '/' + reponame + '/issues'
+            var rep = {
+                popula_tabela: function(tableid){
+                    //var url = 'https://' + username + '.github.io/' + reponame 
+                    var url = 'https://api.github.com/repos/' + username + '/www.' + reponame + '.org/issues'
                     result = $.get(url).success(function (result){
-                        for(var i=0; i<result.length; i++){
-                            addIssue(result[i], tableid)
-                        }
+                        $.each(result, function(idx, issue) { 
+                            $(tableid).append('<tr><td>'+issue.number+'</td><td>'+issue.title+'</td></tr>')
+                        })
                     })
                 },
-                busca_codigo_do_arquivo: function(path){}
             };
-            return repo;
+            return rep;
         }
-    
-        //mais um pouco de codigo aqui....
-        var username = $('#user').val();
-        var reponame = $('#reponame').val();
-        var le_repo = GithubRepo(username, reponame);
-        le_repo.busca_issues_e_depois_popula_tabela('#issuestable')
-
+        var le_repo = GithubRepo($('#user').val(), $('#reponame').val());
+        le_repo.popula_tabela("#issuestable");
     }
 </script>
 </html>
