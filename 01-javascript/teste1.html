@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    Usuario <input type="text" id="user">
+    Repositório <input type="text" id="reponame">
+    <button onclick="vaibuscarasissues()">Vai buscar as issues</button>
+
+    <table id="issuestable">
+        <tr><th>Numero</th><th>Titulo</th>
+    </table>
+</body>
+<script>
+    function vaibuscarasissues(){
+        function GithubRepo(username, reponame){
+            var url = 'https://' + username + '.github.io/' + reponame + '/'
+            result = $.get(url)
+		    console.table(result);
+        }
+    
+        //mais um pouco de codigo aqui....
+        username = $('#user').val();
+        reponame = $('#reponame').val();
+        var le_repo = GithubRepo(username, reponame);
+        //le_repo.busca_issues();
+        //le_repo.popula_tabela("#issuestable");
+    }
+</script>
+</html>
